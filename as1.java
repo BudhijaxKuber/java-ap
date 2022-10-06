@@ -14,14 +14,14 @@ class Student {
     ArrayList<Company> offers_having;
     Company present;
 
-    Student(String name, int roll, double cg, String branch, int ctc ){
+    Student(String name, int roll, double cg, String branch, int ctc) {
         this.name = name;
         this.roll_no = roll;
         this.CGPA = cg;
         this.Branch = branch;
         this.current_CTC = ctc;
         this.Status = "unoffered";
-        this.offers_having  = new ArrayList<Company>();
+        this.offers_having = new ArrayList<Company>();
 
     }
 
@@ -201,17 +201,14 @@ class Company {
     ArrayList<Student> student_selected;
     ArrayList<Student> students_applied;
 
-
-    Company(String name,String role_offering, int package_offered, double cg_req){
+    Company(String name, String role_offering, int package_offered, double cg_req) {
         this.name = name;
         this.role_offering = role_offering;
         this.package_offered = package_offered;
         this.cg_req = cg_req;
-        this.student_selected  = new ArrayList<Student>();
-        this.students_applied  = new ArrayList<Student>();
+        this.student_selected = new ArrayList<Student>();
+        this.students_applied = new ArrayList<Student>();
     }
-
-
 
     public void register_student(Student kuber) {
         // register student to this company
@@ -453,26 +450,16 @@ class PlacementCell {
 
 public class AP_assignment1 {
 
-
-    
     static ArrayList<Student> stud = new ArrayList<Student>();
     static ArrayList<Company> comp = new ArrayList<Company>();
 
-
-
-    public static void enter_as_student(String name, int roll){
-        int indice = -1;
-        for(int i =0 ; i < stud.size() ; i++){
-            if(stud.get(i).name == name && stud.get(i).roll_no == roll){
-                indice = i;
-            }
-        }
-        if(indice == -1){
+    public static void enter_as_student(int indice) {
+        if (indice == -1) {
             System.out.println("You are not registered");
             return;
         }
-        Student stu = stud.get(indice);
-        while(true){
+        Student stu = AP_assignment1.stud.get(indice);
+        while (true) {
             System.out.println("Welcome" + stu.name);
             System.out.println("1) Register For Placement Drive");
             System.out.println("2) Register For Company");
@@ -483,42 +470,34 @@ public class AP_assignment1 {
             System.out.println("7) Reject offer");
             System.out.println("8) Back");
 
-
             System.out.println("Choose the index of operation you wantt to perform");
             Scanner fci = new Scanner(System.in);
             int opr = fci.nextInt();
 
-            if(opr == 1){
+            if (opr == 1) {
                 stu.registered();
-            }
-            else if(opr == 2){
+            } else if (opr == 2) {
                 stu.register_for_company();
-            }
-            else if(opr == 3){
+            } else if (opr == 3) {
                 stu.get_all_companies();
-            }
-            else if(opr == 4){
+            } else if (opr == 4) {
                 stu.get_status();
-            }
-            else if(opr == 5){
+            } else if (opr == 5) {
                 stu.update_cgpa();
-            }
-            else if(opr == 6){
+            } else if (opr == 6) {
                 stu.accept();
-            }
-            else if(opr == 7){
+            } else if (opr == 7) {
                 stu.reject();
-            }
-            else if(opr == 8){
+            } else if (opr == 8) {
                 break;
             }
         }
 
     }
 
-    public static void companyOpen(int index){
+    public static void companyOpen(int index) {
         Company com = comp.get(index);
-        while(true){
+        while (true) {
             System.out.println("Welcome" + com.name);
             System.out.println("1.)Update Role");
             System.out.println("2.)Update Package");
@@ -530,33 +509,24 @@ public class AP_assignment1 {
             Scanner fci = new Scanner(System.in);
             int opr = fci.nextInt();
 
-            if(opr == 1){
+            if (opr == 1) {
                 // update role
                 com.update_role();
-            }
-            else if(opr == 2){
+            } else if (opr == 2) {
                 // Update Package
                 com.update_package();
-            }
-            else if(opr == 3){
+            } else if (opr == 3) {
                 // Update CGPA criteria
                 com.update_cg_req();
-            }
-            else if(opr == 4){
+            } else if (opr == 4) {
                 // Register to insitute Drive
                 com.register_to_institute_drive();
-            }
-            else{
+            } else {
                 // Back
                 break;
             }
         }
     }
-
-
-
-
-
 
     public static void main(String[] args) {
 
@@ -636,8 +606,7 @@ public class AP_assignment1 {
                                 break;
                             }
                         }
-                    } 
-                    else if (mode == 2) {
+                    } else if (mode == 2) {
 
                         // Entered as a company
                         while (true) {
@@ -668,37 +637,32 @@ public class AP_assignment1 {
                                 Company temp = new Company(name, role_offering, package_offered, cg_req);
                                 comp.add(temp);
 
-                                }
-                            else if (opm == 2) {
+                            } else if (opm == 2) {
                                 // choose company
-                                if (comp.size() == 0){
+                                if (comp.size() == 0) {
                                     System.out.println("No companies!!");
-                                }
-                                else{
-                                    for (int i = 0; i< comp.size(); i++){
+                                } else {
+                                    for (int i = 0; i < comp.size(); i++) {
                                         System.out.println(comp.get(i).name);
                                     }
                                     System.out.println("Give the index of company you wanna access!");
                                     Scanner scii = new Scanner(System.in);
                                     int indice = scii.nextInt();
-                                    
+
                                     companyOpen(indice);
 
                                 }
-                            }
-                            else if (opm == 3) {
+                            } else if (opm == 3) {
                                 // get available companies
-                                for(int i = 0; i< comp.size(); i++){
+                                for (int i = 0; i < comp.size(); i++) {
                                     System.out.println(comp.get(i).name);
                                 }
-                            }
-                            else {
+                            } else {
                                 break;
                             }
                         }
 
-                    } 
-                    else if (mode == 1) {
+                    } else if (mode == 1) {
                         // Entered as student
 
                         while (true) {
@@ -715,65 +679,70 @@ public class AP_assignment1 {
                             if (opm == 1) {
                                 // enter as student
                                 Scanner nam = new Scanner(System.in);
-                                String name = nam.nextInt();
+                                String name1 = nam.nextLine();
 
                                 Scanner rolo = new Scanner(System.in);
                                 int roll = rolo.nextInt();
+                                int indice = -1;
+                                // System.out.println(AP_assignment1.stud.size());
+                                for (int i = 0; i < stud.size(); i++) {
+                                    String a = stud.get(i).name;
+                                    System.out.println(a);
+                                    if (stud.get(i).name.equals(name1)) {
+                                        System.out.println("h");
+                                        indice = i;
+                                    }
+                                }
+                                // System.out.println(name + roll);
+                                enter_as_student(indice);
 
-
-                                enter_as_student(name, roll);
-
-
-                            } 
-                            else if (opm == 2) {
+                            } else if (opm == 2) {
                                 // add student
                                 System.out.print("Give number of students: ");
                                 int count;
                                 Scanner a = new Scanner(System.in);
                                 count = a.nextInt();
-                                for (int i = 0 ; i < count; i++){
+                                for (int i = 0; i < count; i++) {
                                     String name;
                                     int roll;
                                     double cg;
                                     String branch;
-                                    int ctc; 
+                                    int ctc;
 
                                     Scanner a_name = new Scanner(System.in);
                                     name = a_name.nextLine();
 
                                     Scanner a_roll = new Scanner(System.in);
-                                    roll = a_name.nextInt();
+                                    roll = a_roll.nextInt();
 
                                     Scanner a_cg = new Scanner(System.in);
-                                    cg = a_name.nextDouble();
+                                    cg = a_cg.nextDouble();
 
                                     Scanner a_branch = new Scanner(System.in);
-                                    branch = a_name.nextLine();
+                                    branch = a_branch.nextLine();
 
                                     Scanner a_ctc = new Scanner(System.in);
-                                    ctc = a_name.nextInt();
+                                    ctc = a_ctc.nextInt();
 
-                                    Student abc = new Student(name,roll,cg,branch,ctc);
+                                    Student abc = new Student(name, roll, cg, branch, ctc);
                                     stud.add(abc);
-                            } 
-                        }
-                            else{
+                                }
+                            } else {
                                 break;
                             }
                         }
-                    }
-                    else {
+                    } else {
                         break;
-                    }    
+                    }
                 }
-                    
-                } 
-            
+
+            }
+
             else {
                 System.out.println("Thanks for using FututeBuilder");
                 break;
             }
-                
-            } 
+
         }
     }
+}
