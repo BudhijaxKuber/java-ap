@@ -275,6 +275,52 @@ class Admin {
     }
 }
 
+class Customer{
+    String name;
+    String password;
+    double wallet;
+
+    public void create_customer(String name, String password){
+        this.name = name;
+        this.password = password;
+        this.wallet = 1000;
+    }
+
+    public void browse_products(){
+        // browse products
+    }
+    public void browse_deals(){
+        // browse deals
+    }
+    public void add_a_product_to_cart(){
+        // add a product to cart
+    }
+    public void add_products_in_deal_to_cart(){
+        // add products in deal to cart
+    }
+    public void view_coupons(){
+        // view coupons
+    }
+    public void check_account_balance(){
+        // check account balance
+    }
+    public void view_cart(){
+        // view cart
+    }
+    public void empty_cart(){
+        // empty cart
+    }
+    public void checkout_cart(){
+        // checkout cart
+    }
+    public void upgrade_customer_status(){
+        // upgrade customer status
+    }
+    public void Add_amount_to_wallet(){
+        // Add amount to wallet
+    }
+}
+
 interface naam {
     static void name() {
         while (true) {
@@ -316,7 +362,121 @@ interface naam {
                 }
 
             } else if (inp == 4) {
+                ArrayList<Customer> customerList = new ArrayList<Customer>();
                 // Enter as Customer
+                while(true){
+                    System.out.println("1.) Sign Up");
+                    System.out.println("2.) Login");
+                    System.out.println("3.) Back");
+
+                    Scanner xc = new Scanner(System.in);
+                    int cust_inp = xc.nextInt();
+
+
+                    if(cust_inp == 1){
+
+                        // Login
+                        Scanner cust_name = new Scanner(System.in);
+                        String customer_name = cust_name.nextLine();
+
+                        Scanner custPass = new Scanner(System.in);
+                        String cust_password = custPass.nextLine();
+
+                        Customer custo = new Customer();
+                        custo.create_customer(customer_name, cust_password);
+                        
+                        customerList.add(custo);
+                        System.out.println("Registered Successfully !");
+
+                    }
+                    else if(cust_inp == 2){
+                        // signup
+                        Scanner name_C = new Scanner(System.in);
+                        String C_name  = name_C.nextLine();
+
+
+                        Scanner pass_C = new Scanner(System.in);
+                        String C_pass  = pass_C.nextLine();
+                        Customer n = new Customer();
+                        n.create_customer(C_name, C_pass);
+                        if(!(customerList.contains(n))){
+                            while(true){
+                                System.out.println("Welcome  " + C_name);
+                                System.out.println("1.) browse products");
+                                System.out.println("2.) browse deals");
+                                System.out.println("3.) add a product to cart");
+                                System.out.println("4.) add products in deal to cart");
+                                System.out.println("5.) view coupons");
+                                System.out.println("6.) check account balance");
+                                System.out.println("7.) view cart");
+                                System.out.println("8.) empty cart");
+                                System.out.println("9.) checkout cart");
+                                System.out.println("10.) upgrade customer status");
+                                System.out.println("11.) Add amount to wallet");
+                                System.out.println("12.) back");
+
+                                Scanner xs = new Scanner(System.in);
+                                int cust_input = xs.nextInt();
+
+                                if(cust_input == 1){
+                                    // browse products
+                                    n.browse_products();
+                                }
+                                else if(cust_input == 2){
+                                    // browse deals
+                                    n.browse_deals();
+                                }
+                                else if(cust_input == 3){
+                                    // add a product to cart
+                                    n.add_a_product_to_cart();
+                                }
+                                else if(cust_input == 4){
+                                    // add products in deal to cart
+                                    n.add_products_in_deal_to_cart();
+                                }
+                                else if(cust_input == 5){
+                                    // view coupons
+                                    n.view_cart();
+                                }
+                                else if(cust_input == 6){
+                                    // check account balance
+                                    n.check_account_balance();
+                                }
+                                else if(cust_input == 7){
+                                    // view cart
+                                    n.view_cart();
+                                }
+                                else if(cust_input == 8){
+                                    // empty cart
+                                    n.empty_cart();
+                                }
+                                else if(cust_input == 9){
+                                    // checkout cart
+                                    n.checkout_cart();
+                                }
+                                else if(cust_input == 10){
+                                    // upgrade customer status
+                                    n.upgrade_customer_status();
+                                }
+                                else if(cust_input == 11){
+                                    // Add amount to wallet
+                                    n.Add_amount_to_wallet();
+                                }
+                                else if(cust_input == 12){
+                                    // back
+                                    break;
+                                }
+                                
+                            }
+                        }
+                        else{
+                            System.out.println("Invalid User");
+                        }
+                    }
+                    else{
+                        break;
+                    }
+                }
             } else if (inp == 5) {
                 // Exit the Application
                 break;
