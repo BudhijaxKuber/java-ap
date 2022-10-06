@@ -56,10 +56,10 @@ class Giveaway {
 
 class Admin {
     String name;
-    ArrayList<Integer> categoryID = new ArrayList<Integer>();
-    ArrayList<Category> categories = new ArrayList<Category>();
-    ArrayList<Discount> offers = new ArrayList<Discount>();
-    ArrayList<Giveaway> giveaway = new ArrayList<Giveaway>();
+    static ArrayList<Integer> categoryID = new ArrayList<Integer>();
+    static ArrayList<Category> categories = new ArrayList<Category>();
+    static ArrayList<Discount> offers = new ArrayList<Discount>();
+    static ArrayList<Giveaway> giveaway = new ArrayList<Giveaway>();
 
     public void login(String name, String pass) {
         if (!(pass.equals("Kuber23"))
@@ -279,11 +279,14 @@ class Customer{
     String name;
     String password;
     double wallet;
+    String currentStatus;
+    ArrayList<Product> cart = new ArrayList<Product>();
 
     public void create_customer(String name, String password){
         this.name = name;
         this.password = password;
         this.wallet = 1000;
+        this.currentStatus = "NORMAL";
     }
 
     public void browse_products(){
@@ -294,6 +297,27 @@ class Customer{
     }
     public void add_a_product_to_cart(){
         // add a product to cart
+        System.out.println("Enter category ID");
+        Scanner ci = new Scanner(System.in);
+        int cat_id = ci.nextInt();
+        
+        System.out.println("Enter Product ID");
+        Scanner pi = new Scanner(System.in);
+        String prodId = pi.nextLine();
+
+        for(int i = 0; i < Admin.categories.size(); i++){
+            if(Admin.categories.get(i).category_id == cat_id){
+                for(int j = 0; j<Admin.categories.get(i).product.size(); i++){
+                    if(Admin.categories.get(i).product.get(j).product_id.equals(prodId)){
+                        this.cart.add(Admin.categories.get(i).product.get(j));
+                        return;
+                    }
+                }
+            }
+        }
+        System.out.println("Product not Available");
+
+    
     }
     public void add_products_in_deal_to_cart(){
         // add products in deal to cart
@@ -303,6 +327,7 @@ class Customer{
     }
     public void check_account_balance(){
         // check account balance
+        System.out.println("Your current Balance is : " + this.wallet);
     }
     public void view_cart(){
         // view cart
@@ -315,9 +340,35 @@ class Customer{
     }
     public void upgrade_customer_status(){
         // upgrade customer status
+        System.out.println("Choose new Status");
+        System.out.println("1.) ELIE");
+        System.out.println("2.) PRIME ");
+
+        Scanner sta = new Scanner(System.in);
+        int status = sta.nextInt();
+
+        if(status == 1  & this.currentStatus!="ELITE"){
+            this.currentStatus = "ELITE";
+            this.wallet = this.wallet - 300;
+
+            System.out.println("Status Updated!");
+        }
+        else if(status == 2 & this.currentStatus!="PRIME"){
+            this.currentStatus = "PRIME";
+            this.wallet = this.wallet - 200;
+
+            System.out.println("Status Updated!");
+        }
     }
     public void Add_amount_to_wallet(){
         // Add amount to wallet
+        System.out.println("Enter the amount to add");
+        Scanner am = new Scanner(System.in);
+        double amt = am.nextDouble();
+
+        this.wallet = this.wallet + amt;
+
+        System.out.println("Amount Added Successfully");
     }
 }
 
@@ -399,7 +450,18 @@ interface naam {
                         String C_pass  = pass_C.nextLine();
                         Customer n = new Customer();
                         n.create_customer(C_name, C_pass);
-                        if(!(customerList.contains(n))){
+
+                        int flag = 0 ;
+
+                        for(int i= 0; i<customerList.size(); i++){
+                            if(customerList.get(i).name.equals(C_name)){
+                                flag = 1;
+                                break;
+                            }
+                        }
+
+
+                        if(flag == 1){
                             while(true){
                                 System.out.println("Welcome  " + C_name);
                                 System.out.println("1.) browse products");
@@ -427,7 +489,7 @@ interface naam {
                                     n.browse_deals();
                                 }
                                 else if(cust_input == 3){
-                                    // add a product to cart
+                                    // add a product to cart//
                                     n.add_a_product_to_cart();
                                 }
                                 else if(cust_input == 4){
@@ -439,7 +501,7 @@ interface naam {
                                     n.view_cart();
                                 }
                                 else if(cust_input == 6){
-                                    // check account balance
+                                    // check account balance //
                                     n.check_account_balance();
                                 }
                                 else if(cust_input == 7){
@@ -455,15 +517,15 @@ interface naam {
                                     n.checkout_cart();
                                 }
                                 else if(cust_input == 10){
-                                    // upgrade customer status
+                                    // upgrade customer status //
                                     n.upgrade_customer_status();
                                 }
                                 else if(cust_input == 11){
-                                    // Add amount to wallet
+                                    // Add amount to wallet //
                                     n.Add_amount_to_wallet();
                                 }
                                 else if(cust_input == 12){
-                                    // back
+                                    // back //
                                     break;
                                 }
                                 
