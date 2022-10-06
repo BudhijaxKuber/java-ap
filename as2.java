@@ -281,6 +281,7 @@ class Customer{
     double wallet;
     String currentStatus;
     ArrayList<Product> cart = new ArrayList<Product>();
+    ArrayList<Product> quantcart = new ArrayList<Product>();
 
     public void create_customer(String name, String password){
         this.name = name;
@@ -305,11 +306,19 @@ class Customer{
         Scanner pi = new Scanner(System.in);
         String prodId = pi.nextLine();
 
+        System.out.println("Enter Product quantity");
+        Scanner pqi = new Scanner(System.in);
+        int prodqu = pqi.nextInt();
+
         for(int i = 0; i < Admin.categories.size(); i++){
             if(Admin.categories.get(i).category_id == cat_id){
                 for(int j = 0; j<Admin.categories.get(i).product.size(); i++){
                     if(Admin.categories.get(i).product.get(j).product_id.equals(prodId)){
                         this.cart.add(Admin.categories.get(i).product.get(j));
+
+                        for(int k = 0; k<prodqu; k++){
+                            this.quantcart.add(Admin.categories.get(i).product.get(j));
+                        }
                         return;
                     }
                 }
@@ -331,9 +340,17 @@ class Customer{
     }
     public void view_cart(){
         // view cart
+        for(int i  = 0; i<this.cart.size(); i++){
+            System.out.println(this.cart.get(i).name);
+            System.out.println(this.cart.get(i).product_id);
+            System.out.println(this.cart.get(i).price);
+            System.out.println("***********************");
+        }
     }
     public void empty_cart(){
         // empty cart
+        this.cart.clear();
+        System.out.println("Cart Emptied");
     }
     public void checkout_cart(){
         // checkout cart
@@ -505,11 +522,11 @@ interface naam {
                                     n.check_account_balance();
                                 }
                                 else if(cust_input == 7){
-                                    // view cart
+                                    // view cart //
                                     n.view_cart();
                                 }
                                 else if(cust_input == 8){
-                                    // empty cart
+                                    // empty cart //
                                     n.empty_cart();
                                 }
                                 else if(cust_input == 9){
