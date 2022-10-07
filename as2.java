@@ -45,12 +45,14 @@ class Discount {
 class Giveaway {
     String id1;
     String id2;
+    String giveaway_id;
     int new_price;
 
-    public void create_giveaway(String id1, String id2, int new_price) {
+    public void create_giveaway(String id1, String id2, int new_price, String giveaway_id) {
         this.id1 = id1;
         this.id2 = id2;
         this.new_price = new_price;
+        this.giveaway_id = giveaway_id;
     }
 }
 
@@ -269,39 +271,65 @@ class Admin {
         Scanner prd = new Scanner(System.in);
         int p_i_d = proid.nextInt();
 
-        g.create_giveaway(pid1, pid2, p_i_d);
+
+        System.out.println("Giveaway ID:");
+        Scanner pridii = new Scanner(System.in);
+        String gaid = pridii.nextLine();
+
+        g.create_giveaway(pid1, pid2, p_i_d, gaid);
 
         giveaway.add(g);
     }
 }
 
-class Customer{
+class Customer {
     String name;
     String password;
     double wallet;
     String currentStatus;
     ArrayList<Product> cart = new ArrayList<Product>();
     ArrayList<Product> quantcart = new ArrayList<Product>();
+    ArrayList<Double> coupon = new ArrayList<Double>();
 
-    public void create_customer(String name, String password){
+    public void create_customer(String name, String password) {
         this.name = name;
         this.password = password;
         this.wallet = 1000;
         this.currentStatus = "NORMAL";
     }
 
-    public void browse_products(){
+    public void browse_products() {
         // browse products
+        for(int i = 0; i < Admin.categories.size(); i++){
+            // iterating over giveaway deals
+            System.out.println(Admin.categories.get(i).category_name);
+            for (int j = 0; j<Admin.categories.get(i).product.size(); j++){
+                System.out.println(Admin.categories.get(i).product.get(j).name);
+                System.out.println(Admin.categories.get(i).product.get(j).product_id);
+                System.out.println(Admin.categories.get(i).product.get(j).price);
+                System.out.println(Admin.categories.get(i).product.get(j).details);
+            }
+        }
     }
-    public void browse_deals(){
+
+    public void browse_deals() {
         // browse deals
+        for(int i = 0; i < Admin.giveaway.size(); i++){
+            // iterating over giveaway deals
+            System.out.println(Admin.giveaway.get(i).giveaway_id);
+            System.out.println(Admin.giveaway.get(i).id1);
+            System.out.println(Admin.giveaway.get(i).id2);
+            System.out.println(Admin.giveaway.get(i).new_price);
+            System.out.println("***********************");
+        }
     }
-    public void add_a_product_to_cart(){
+
+    public void add_a_product_to_cart() {
         // add a product to cart
         System.out.println("Enter category ID");
         Scanner ci = new Scanner(System.in);
         int cat_id = ci.nextInt();
-        
+
         System.out.println("Enter Product ID");
         Scanner pi = new Scanner(System.in);
         String prodId = pi.nextLine();
@@ -310,13 +338,13 @@ class Customer{
         Scanner pqi = new Scanner(System.in);
         int prodqu = pqi.nextInt();
 
-        for(int i = 0; i < Admin.categories.size(); i++){
-            if(Admin.categories.get(i).category_id == cat_id){
-                for(int j = 0; j<Admin.categories.get(i).product.size(); i++){
-                    if(Admin.categories.get(i).product.get(j).product_id.equals(prodId)){
+        for (int i = 0; i < Admin.categories.size(); i++) {
+            if (Admin.categories.get(i).category_id == cat_id) {
+                for (int j = 0; j < Admin.categories.get(i).product.size(); i++) {
+                    if (Admin.categories.get(i).product.get(j).product_id.equals(prodId)) {
                         this.cart.add(Admin.categories.get(i).product.get(j));
 
-                        for(int k = 0; k<prodqu; k++){
+                        for (int k = 0; k < prodqu; k++) {
                             this.quantcart.add(Admin.categories.get(i).product.get(j));
                         }
                         return;
@@ -326,36 +354,119 @@ class Customer{
         }
         System.out.println("Product not Available");
 
-    
     }
-    public void add_products_in_deal_to_cart(){
+
+    public void add_products_in_deal_to_cart() {
         // add products in deal to cart
+        for(int i = 0; i < Admin.giveaway.size(); i++){
+            // iterating over giveaway deals
+            System.out.println(Admin.giveaway.get(i).giveaway_id);
+            System.out.println(Admin.giveaway.get(i).id1);
+            System.out.println(Admin.giveaway.get(i).id2);
+            System.out.println(Admin.giveaway.get(i).new_price);
+            System.out.println("***********************");
+        }
+        System.out.println("Enter id of deal you want to add to your cart");
+        Scanner sici = new Scanner(System.in);
+        String dealID = sici.nextLine();
+    
+        System.out.println("Enter quantity of deal you want to add to your cart");
+        Scanner sicii = new Scanner(System.in);
+        int dealq = sicii.nextInt();
+
+        Product m = new Product();
+
+        name = "Deal";
+        String details = "";
+        int price = 0;
+        for(int i = 0; i < Admin.giveaway.size(); i++){
+            if (Admin.giveaway.get(i).giveaway_id.equals(dealID)){
+                price = Admin.giveaway.get(i).new_price;
+                details = Admin.giveaway.get(i).id1 + " " + Admin.giveaway.get(i).id2;
+            }
+
+        }
+
+        m.create_product(name, dealID, price, details);
+
+        this.cart.add(m);
+        for(int j = 0; j < dealq; j++){
+            this.quantcart.add(m);
+        }
+
     }
-    public void view_coupons(){
+
+    public void view_coupons() {
         // view coupons
+        if(this.coupon.size() == 0){
+            System.out.println("No coupon Available");
+        }
+        else{
+            System.out.println("you have following coupons" );
+            for(int i = 0; i< this.coupon.size(); i++){
+                System.out.println(this.coupon.get(i));
+            }
+        }
     }
-    public void check_account_balance(){
+
+    public void check_account_balance() {
         // check account balance
         System.out.println("Your current Balance is : " + this.wallet);
     }
-    public void view_cart(){
+
+    public void view_cart() {
         // view cart
-        for(int i  = 0; i<this.cart.size(); i++){
+        for (int i = 0; i < this.cart.size(); i++) {
             System.out.println(this.cart.get(i).name);
             System.out.println(this.cart.get(i).product_id);
             System.out.println(this.cart.get(i).price);
             System.out.println("***********************");
         }
     }
-    public void empty_cart(){
+
+    public void empty_cart() {
         // empty cart
         this.cart.clear();
         System.out.println("Cart Emptied");
     }
-    public void checkout_cart(){
+
+    public void checkout_cart() {
         // checkout cart
+
+        double cart_value = 0;
+        double delivery_charges = 0;
+        double coupon_value = 0;
+        for(int i =0; i<this.quantcart.size(); i++){
+            cart_value += this.quantcart.get(i).price;
+        }
+        if(this.coupon.size()!=0){
+            coupon_value = Collections.max(this.coupon);            
+        }
+
+        double discount = (cart_value * coupon_value)/100;
+        delivery_charges = (2 * cart_value)/100 +100 ;
+        double new_value = cart_value - discount + delivery_charges ;
+        if(cart_value==0){
+            System.out.println("Nothing in cart!");
+            return;
+        }
+        if(new_value > this.wallet){
+            System.out.println("Insufficient Value");
+        }
+        else{
+            this.wallet -= new_value;
+            this.coupon.remove(coupon_value);
+
+            view_cart();
+
+            System.out.println("Transaction Successfull! your order will be delivered within 3-4 days.");
+            System.out.println("Total Price" + new_value);
+        }
+
+
     }
-    public void upgrade_customer_status(){
+
+    public void upgrade_customer_status() {
         // upgrade customer status
         System.out.println("Choose new Status");
         System.out.println("1.) ELIE");
@@ -364,20 +475,20 @@ class Customer{
         Scanner sta = new Scanner(System.in);
         int status = sta.nextInt();
 
-        if(status == 1  & this.currentStatus!="ELITE"){
+        if (status == 1 & this.currentStatus != "ELITE") {
             this.currentStatus = "ELITE";
             this.wallet = this.wallet - 300;
 
             System.out.println("Status Updated!");
-        }
-        else if(status == 2 & this.currentStatus!="PRIME"){
+        } else if (status == 2 & this.currentStatus != "PRIME") {
             this.currentStatus = "PRIME";
             this.wallet = this.wallet - 200;
 
             System.out.println("Status Updated!");
         }
     }
-    public void Add_amount_to_wallet(){
+
+    public void Add_amount_to_wallet() {
         // Add amount to wallet
         System.out.println("Enter the amount to add");
         Scanner am = new Scanner(System.in);
@@ -419,6 +530,16 @@ interface naam {
 
             } else if (inp == 2) {
                 // Explore the product Catalog
+                for(int i = 0; i < Admin.categories.size(); i++){
+                    // iterating over giveaway deals
+                    System.out.println(Admin.categories.get(i).category_name);
+                    for (int j = 0; j<Admin.categories.get(i).product.size(); j++){
+                        System.out.println(Admin.categories.get(i).product.get(j).name);
+                        System.out.println(Admin.categories.get(i).product.get(j).product_id);
+                        System.out.println(Admin.categories.get(i).product.get(j).price);
+                        System.out.println(Admin.categories.get(i).product.get(j).details);
+                    }
+                }
             } else if (inp == 3) {
                 // Show available Deals
                 for (int i = 0; i < adm.offers.size(); i++) {
@@ -432,7 +553,7 @@ interface naam {
             } else if (inp == 4) {
                 ArrayList<Customer> customerList = new ArrayList<Customer>();
                 // Enter as Customer
-                while(true){
+                while (true) {
                     System.out.println("1.) Sign Up");
                     System.out.println("2.) Login");
                     System.out.println("3.) Back");
@@ -440,8 +561,7 @@ interface naam {
                     Scanner xc = new Scanner(System.in);
                     int cust_inp = xc.nextInt();
 
-
-                    if(cust_inp == 1){
+                    if (cust_inp == 1) {
 
                         // Login
                         Scanner cust_name = new Scanner(System.in);
@@ -452,107 +572,94 @@ interface naam {
 
                         Customer custo = new Customer();
                         custo.create_customer(customer_name, cust_password);
-                        
+
                         customerList.add(custo);
                         System.out.println("Registered Successfully !");
 
-                    }
-                    else if(cust_inp == 2){
+                    } else if (cust_inp == 2) {
                         // signup
                         Scanner name_C = new Scanner(System.in);
-                        String C_name  = name_C.nextLine();
-
+                        String C_name = name_C.nextLine();
 
                         Scanner pass_C = new Scanner(System.in);
-                        String C_pass  = pass_C.nextLine();
+                        String C_pass = pass_C.nextLine();
                         Customer n = new Customer();
                         n.create_customer(C_name, C_pass);
 
-                        int flag = 0 ;
+                        int flag = 0;
 
-                        for(int i= 0; i<customerList.size(); i++){
-                            if(customerList.get(i).name.equals(C_name)){
+                        for (int i = 0; i < customerList.size(); i++) {
+                            if (customerList.get(i).name.equals(C_name)) {
                                 flag = 1;
                                 break;
                             }
                         }
 
+                        
+                        while (true) {
+                            System.out.println("Welcome  " + C_name);
+                            System.out.println("1.) browse products");
+                            System.out.println("2.) browse deals");
+                            System.out.println("3.) add a product to cart");
+                            System.out.println("4.) add products in deal to cart");
+                            System.out.println("5.) view coupons");
+                            System.out.println("6.) check account balance");
+                            System.out.println("7.) view cart");
+                            System.out.println("8.) empty cart");
+                            System.out.println("9.) checkout cart");
+                            System.out.println("10.) upgrade customer status");
+                            System.out.println("11.) Add amount to wallet");
+                            System.out.println("12.) back");
 
-                        if(flag == 1){
-                            while(true){
-                                System.out.println("Welcome  " + C_name);
-                                System.out.println("1.) browse products");
-                                System.out.println("2.) browse deals");
-                                System.out.println("3.) add a product to cart");
-                                System.out.println("4.) add products in deal to cart");
-                                System.out.println("5.) view coupons");
-                                System.out.println("6.) check account balance");
-                                System.out.println("7.) view cart");
-                                System.out.println("8.) empty cart");
-                                System.out.println("9.) checkout cart");
-                                System.out.println("10.) upgrade customer status");
-                                System.out.println("11.) Add amount to wallet");
-                                System.out.println("12.) back");
+                            Scanner xs = new Scanner(System.in);
+                            int cust_input = xs.nextInt();
 
-                                Scanner xs = new Scanner(System.in);
-                                int cust_input = xs.nextInt();
-
-                                if(cust_input == 1){
-                                    // browse products
-                                    n.browse_products();
-                                }
-                                else if(cust_input == 2){
-                                    // browse deals
-                                    n.browse_deals();
-                                }
-                                else if(cust_input == 3){
-                                    // add a product to cart//
-                                    n.add_a_product_to_cart();
-                                }
-                                else if(cust_input == 4){
-                                    // add products in deal to cart
-                                    n.add_products_in_deal_to_cart();
-                                }
-                                else if(cust_input == 5){
-                                    // view coupons
-                                    n.view_cart();
-                                }
-                                else if(cust_input == 6){
-                                    // check account balance //
-                                    n.check_account_balance();
-                                }
-                                else if(cust_input == 7){
-                                    // view cart //
-                                    n.view_cart();
-                                }
-                                else if(cust_input == 8){
-                                    // empty cart //
-                                    n.empty_cart();
-                                }
-                                else if(cust_input == 9){
-                                    // checkout cart
+                            if (cust_input == 1) {
+                                // browse products//
+                                n.browse_products();
+                            } else if (cust_input == 2) {
+                                // browse deals//
+                                n.browse_deals();
+                            } else if (cust_input == 3) {
+                                // add a product to cart//
+                                n.add_a_product_to_cart();
+                            } else if (cust_input == 4) {
+                                // add products in deal to cart//
+                                n.add_products_in_deal_to_cart();
+                            } else if (cust_input == 5) {
+                                // view coupons//
+                                n.view_cart();
+                            } else if (cust_input == 6) {
+                                // check account balance //
+                                n.check_account_balance();
+                            } else if (cust_input == 7) {
+                                // view cart //
+                                n.view_cart();
+                            } else if (cust_input == 8) {
+                                // empty cart //
+                                n.empty_cart();
+                            } else if (cust_input == 9) {
+                                // checkout cart
+                                if(flag == 1){
                                     n.checkout_cart();
                                 }
-                                else if(cust_input == 10){
-                                    // upgrade customer status //
-                                    n.upgrade_customer_status();
+                                else{
+                                    System.out.println("Invalid user/ not registered");
                                 }
-                                else if(cust_input == 11){
-                                    // Add amount to wallet //
-                                    n.Add_amount_to_wallet();
-                                }
-                                else if(cust_input == 12){
-                                    // back //
-                                    break;
-                                }
-                                
+                            } else if (cust_input == 10) {
+                                // upgrade customer status //
+                                n.upgrade_customer_status();
+                            } else if (cust_input == 11) {
+                                // Add amount to wallet //
+                                n.Add_amount_to_wallet();
+                            } else if (cust_input == 12) {
+                                // back //
+                                break;
                             }
+
                         }
-                        else{
-                            System.out.println("Invalid User");
-                        }
-                    }
-                    else{
+                    
+                    } else {
                         break;
                     }
                 }
