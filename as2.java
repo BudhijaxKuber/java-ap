@@ -460,17 +460,17 @@ class Customer {
         double coupon_value = 0;
         for (int i = 0; i < this.quantcart.size(); i++) {
 
-            if (this.currentStatus.equals("Normal")) {
+            if (this.currentStatus.equals("NORMAL")) {
                 cart_value = cart_value
-                        + (this.quantcart.get(i).price) * ((1 - (this.quantcart.get(i).disc_for_normal)) / 100);
+                        + (this.quantcart.get(i).price) * ((1 - ((this.quantcart.get(i).disc_for_normal)) / 100));
             }
-            if (this.currentStatus.equals("Elite")) {
+            if (this.currentStatus.equals("ELITE")) {
                 cart_value = cart_value
-                        + (this.quantcart.get(i).price) * ((1 - (this.quantcart.get(i).disc_for_elite)) / 100);
+                        + (this.quantcart.get(i).price) * ((1 - ((this.quantcart.get(i).disc_for_elite)) / 100));
             }
-            if (this.currentStatus.equals("Prime")) {
+            if (this.currentStatus.equals("PRIME")) {
                 cart_value = cart_value
-                        + (this.quantcart.get(i).price) * ((1 - (this.quantcart.get(i).disc_for_prime)) / 100);
+                        + (this.quantcart.get(i).price) * ((1 - ((this.quantcart.get(i).disc_for_prime)) / 100));
             }
         }
         if (this.coupon.size() != 0) {
@@ -491,7 +491,12 @@ class Customer {
         }
 
         double discount = (cart_value * coupon_value) / 100;
+        System.out.println("CART VALUE:" + cart_value);
+        System.out.println("delivery charges" + delivery_charges);
+        System.out.println("discount: " + discount);
+        System.out.println("category specific discount" + category_specific_discount);
         double new_value = cart_value - discount + delivery_charges - category_specific_discount;
+        System.out.println("Final Value" + new_value);
         if (cart_value == 0) {
             System.out.println("Nothing in cart!");
             return;
@@ -505,12 +510,8 @@ class Customer {
             view_cart();
 
             if (this.currentStatus.equals("NORMAL")) {
-                category_specific_discount = cart_value * ((Admin.offers.get(0).discount_percentage_normal) / 100);
                 System.out.println("Transaction Successfull! your order will be delivered within 6-7 days.");
             } else if (this.currentStatus.equals("ELITE")) {
-                category_specific_discount = cart_value * ((Admin.offers.get(0).discount_percentage_elite) / 100)
-                        + cart_value * (10 / 100);
-
                 Random randl = new Random();
                 int y = randl.nextInt(3, 4);
 
@@ -525,8 +526,6 @@ class Customer {
 
                 System.out.println("Transaction Successfull! your order will be delivered within 2 days.");
             } else if (this.currentStatus.equals("PRIME")) {
-                category_specific_discount = cart_value
-                        * ((Admin.offers.get(0).discount_percentage_prime / 100) + cart_value * (10 / 100));
                 System.out.println("Transaction Successfull! your order will be delivered within 3-4 days.");
 
                 Random randl = new Random();
