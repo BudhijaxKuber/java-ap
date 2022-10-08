@@ -9,12 +9,19 @@ class Product {
     String product_id;
     double price;
     String details;
+    double disc_for_normal;
+    double disc_for_elite;
+    double disc_for_prime;
 
-    public void create_product(String name, String product_id, double price, String details) {
+    public void create_product(String name, String product_id, double price, String details, double disc_for_normal,
+            double disc_for_elite, double disc_for_prime) {
         this.name = name;
         this.product_id = product_id;
         this.price = price;
         this.details = details;
+        this.disc_for_elite = disc_for_elite;
+        this.disc_for_normal = disc_for_normal;
+        this.disc_for_prime = disc_for_prime;
     }
 }
 
@@ -32,13 +39,17 @@ class Category {
 
 class Discount {
     String product_id;
-    Double discount_percentage;
+    Double discount_percentage_normal;
+    Double discount_percentage_elite;
+    Double discount_percentage_prime;
     String customer;
 
-    public void create_discount(String product_id, Double discount_percentage, String customer) {
+    public void create_discount(String product_id, Double discount_percentage_normal, Double discount_percentage_elite,
+            Double discount_percentage_prime) {
         this.product_id = product_id;
-        this.discount_percentage = discount_percentage;
-        this.customer = customer;
+        this.discount_percentage_elite = discount_percentage_elite;
+        this.discount_percentage_normal = discount_percentage_normal;
+        this.discount_percentage_prime = discount_percentage_prime;
     }
 }
 
@@ -143,7 +154,7 @@ class Admin {
             Scanner p_d = new Scanner(System.in);
             String details = p_d.nextLine();
 
-            x.create_product(p_naam, p_id, pp, details);
+            x.create_product(p_naam, p_id, pp, details, 0, 0, 0);
 
             cat.create_category(category_ID, category_name);
 
@@ -201,7 +212,7 @@ class Admin {
                 Scanner p_d = new Scanner(System.in);
                 String details = p_d.nextLine();
 
-                p.create_product(p_naam, p_id, pp, details);
+                p.create_product(p_naam, p_id, pp, details, 0, 0, 0);
                 categories.get(i).product.add(p);
             }
         }
@@ -244,15 +255,28 @@ class Admin {
         Scanner proid = new Scanner(System.in);
         String pid = proid.nextLine();
 
-        System.out.println("Discount percentage:");
+        System.out.println("Discount percentage for Normal:");
         Scanner prid = new Scanner(System.in);
-        Double dp = prid.nextDouble();
+        Double dn = prid.nextDouble();
 
-        System.out.println("Customer which can avail:");
-        Scanner cust = new Scanner(System.in);
-        String cust_cat = cust.nextLine();
+        System.out.println("Discount percentage for Elite:");
+        Scanner pridi = new Scanner(System.in);
+        Double de = pridi.nextDouble();
 
-        d.create_discount(pid, dp, cust_cat);
+        System.out.println("Discount percentage for Prime:");
+        Scanner pridio = new Scanner(System.in);
+        Double dp = pridio.nextDouble();
+
+        d.create_discount(pid, dn, de, dp);
+        for (int i = 0; i < Admin.categories.size(); i++) {
+            for (int j = 0; j < Admin.categories.get(i).product.size(); j++) {
+                if (Admin.categories.get(i).product.get(j).product_id.equals(pid)) {
+                    Admin.categories.get(i).product.get(j).disc_for_normal = dn;
+                    Admin.categories.get(i).product.get(j).disc_for_prime = dp;
+                    Admin.categories.get(i).product.get(j).disc_for_elite = de;
+                }
+            }
+        }
         offers.add(d);
     }
 
@@ -270,7 +294,6 @@ class Admin {
         System.out.println("New Price:");
         Scanner prd = new Scanner(System.in);
         int p_i_d = proid.nextInt();
-
 
         System.out.println("Giveaway ID:");
         Scanner pridii = new Scanner(System.in);
@@ -300,10 +323,10 @@ class Customer {
 
     public void browse_products() {
         // browse products
-        for(int i = 0; i < Admin.categories.size(); i++){
+        for (int i = 0; i < Admin.categories.size(); i++) {
             // iterating over giveaway deals
             System.out.println(Admin.categories.get(i).category_name);
-            for (int j = 0; j<Admin.categories.get(i).product.size(); j++){
+            for (int j = 0; j < Admin.categories.get(i).product.size(); j++) {
                 System.out.println(Admin.categories.get(i).product.get(j).name);
                 System.out.println(Admin.categories.get(i).product.get(j).product_id);
                 System.out.println(Admin.categories.get(i).product.get(j).price);
@@ -314,7 +337,7 @@ class Customer {
 
     public void browse_deals() {
         // browse deals
-        for(int i = 0; i < Admin.giveaway.size(); i++){
+        for (int i = 0; i < Admin.giveaway.size(); i++) {
             // iterating over giveaway deals
             System.out.println(Admin.giveaway.get(i).giveaway_id);
             System.out.println(Admin.giveaway.get(i).id1);
@@ -358,7 +381,7 @@ class Customer {
 
     public void add_products_in_deal_to_cart() {
         // add products in deal to cart
-        for(int i = 0; i < Admin.giveaway.size(); i++){
+        for (int i = 0; i < Admin.giveaway.size(); i++) {
             // iterating over giveaway deals
             System.out.println(Admin.giveaway.get(i).giveaway_id);
             System.out.println(Admin.giveaway.get(i).id1);
@@ -369,7 +392,7 @@ class Customer {
         System.out.println("Enter id of deal you want to add to your cart");
         Scanner sici = new Scanner(System.in);
         String dealID = sici.nextLine();
-    
+
         System.out.println("Enter quantity of deal you want to add to your cart");
         Scanner sicii = new Scanner(System.in);
         int dealq = sicii.nextInt();
@@ -379,18 +402,18 @@ class Customer {
         name = "Deal";
         String details = "";
         int price = 0;
-        for(int i = 0; i < Admin.giveaway.size(); i++){
-            if (Admin.giveaway.get(i).giveaway_id.equals(dealID)){
+        for (int i = 0; i < Admin.giveaway.size(); i++) {
+            if (Admin.giveaway.get(i).giveaway_id.equals(dealID)) {
                 price = Admin.giveaway.get(i).new_price;
                 details = Admin.giveaway.get(i).id1 + " " + Admin.giveaway.get(i).id2;
             }
 
         }
 
-        m.create_product(name, dealID, price, details);
+        m.create_product(name, dealID, price, details, 0, 0, 0);
 
         this.cart.add(m);
-        for(int j = 0; j < dealq; j++){
+        for (int j = 0; j < dealq; j++) {
             this.quantcart.add(m);
         }
 
@@ -398,12 +421,11 @@ class Customer {
 
     public void view_coupons() {
         // view coupons
-        if(this.coupon.size() == 0){
+        if (this.coupon.size() == 0) {
             System.out.println("No coupon Available");
-        }
-        else{
-            System.out.println("you have following coupons" );
-            for(int i = 0; i< this.coupon.size(); i++){
+        } else {
+            System.out.println("you have following coupons");
+            for (int i = 0; i < this.coupon.size(); i++) {
                 System.out.println(this.coupon.get(i));
             }
         }
@@ -436,33 +458,90 @@ class Customer {
         double cart_value = 0;
         double delivery_charges = 0;
         double coupon_value = 0;
-        for(int i =0; i<this.quantcart.size(); i++){
-            cart_value += this.quantcart.get(i).price;
+        for (int i = 0; i < this.quantcart.size(); i++) {
+
+            if (this.currentStatus.equals("Normal")) {
+                cart_value = cart_value
+                        + (this.quantcart.get(i).price) * ((1 - (this.quantcart.get(i).disc_for_normal)) / 100);
+            }
+            if (this.currentStatus.equals("Elite")) {
+                cart_value = cart_value
+                        + (this.quantcart.get(i).price) * ((1 - (this.quantcart.get(i).disc_for_elite)) / 100);
+            }
+            if (this.currentStatus.equals("Prime")) {
+                cart_value = cart_value
+                        + (this.quantcart.get(i).price) * ((1 - (this.quantcart.get(i).disc_for_prime)) / 100);
+            }
         }
-        if(this.coupon.size()!=0){
-            coupon_value = Collections.max(this.coupon);            
+        if (this.coupon.size() != 0) {
+            coupon_value = Collections.max(this.coupon);
         }
 
-        double discount = (cart_value * coupon_value)/100;
-        delivery_charges = (2 * cart_value)/100 +100 ;
-        double new_value = cart_value - discount + delivery_charges ;
-        if(cart_value==0){
+        double category_specific_discount = 0;
+
+        if (this.currentStatus.equals("NORMAL")) {
+            category_specific_discount = 0;
+            delivery_charges = 100 + (0.05 * cart_value);
+        } else if (this.currentStatus.equals("ELITE")) {
+            category_specific_discount = cart_value * (10 / 100);
+            delivery_charges = 100;
+        } else if (this.currentStatus.equals("PRIME")) {
+            category_specific_discount = cart_value * (5 / 100);
+            delivery_charges = 100 + (0.02 * cart_value);
+        }
+
+        double discount = (cart_value * coupon_value) / 100;
+        double new_value = cart_value - discount + delivery_charges - category_specific_discount;
+        if (cart_value == 0) {
             System.out.println("Nothing in cart!");
             return;
         }
-        if(new_value > this.wallet){
+        if (new_value > this.wallet) {
             System.out.println("Insufficient Value");
-        }
-        else{
+        } else {
             this.wallet -= new_value;
             this.coupon.remove(coupon_value);
 
             view_cart();
 
-            System.out.println("Transaction Successfull! your order will be delivered within 3-4 days.");
+            if (this.currentStatus.equals("NORMAL")) {
+                category_specific_discount = cart_value * ((Admin.offers.get(0).discount_percentage_normal) / 100);
+                System.out.println("Transaction Successfull! your order will be delivered within 6-7 days.");
+            } else if (this.currentStatus.equals("ELITE")) {
+                category_specific_discount = cart_value * ((Admin.offers.get(0).discount_percentage_elite) / 100)
+                        + cart_value * (10 / 100);
+
+                Random randl = new Random();
+                int y = randl.nextInt(3, 4);
+
+                System.out.println("You got your Surprise! Enjoy as soon as you get your order");
+
+                for (int ij = 0; ij < y; ij++) {
+                    Random rand = new Random();
+                    double x = rand.nextDouble(5, 15);
+                    this.coupon.add(x);
+
+                }
+
+                System.out.println("Transaction Successfull! your order will be delivered within 2 days.");
+            } else if (this.currentStatus.equals("PRIME")) {
+                category_specific_discount = cart_value
+                        * ((Admin.offers.get(0).discount_percentage_prime / 100) + cart_value * (10 / 100));
+                System.out.println("Transaction Successfull! your order will be delivered within 3-4 days.");
+
+                Random randl = new Random();
+                int y = randl.nextInt(1, 2);
+
+                for (int ij = 0; ij < y; ij++) {
+                    Random rand = new Random();
+                    double x = rand.nextDouble(5, 15);
+                    this.coupon.add(x);
+
+                }
+            }
+
             System.out.println("Total Price" + new_value);
         }
-
 
     }
 
@@ -475,12 +554,12 @@ class Customer {
         Scanner sta = new Scanner(System.in);
         int status = sta.nextInt();
 
-        if (status == 1 & this.currentStatus != "ELITE") {
+        if (status == 1 & !(this.currentStatus.equals("ELITE"))) {
             this.currentStatus = "ELITE";
             this.wallet = this.wallet - 300;
 
             System.out.println("Status Updated!");
-        } else if (status == 2 & this.currentStatus != "PRIME") {
+        } else if (status == 2 & !(this.currentStatus.equals("PRIME"))) {
             this.currentStatus = "PRIME";
             this.wallet = this.wallet - 200;
 
@@ -530,10 +609,10 @@ interface naam {
 
             } else if (inp == 2) {
                 // Explore the product Catalog
-                for(int i = 0; i < Admin.categories.size(); i++){
+                for (int i = 0; i < Admin.categories.size(); i++) {
                     // iterating over giveaway deals
                     System.out.println(Admin.categories.get(i).category_name);
-                    for (int j = 0; j<Admin.categories.get(i).product.size(); j++){
+                    for (int j = 0; j < Admin.categories.get(i).product.size(); j++) {
                         System.out.println(Admin.categories.get(i).product.get(j).name);
                         System.out.println(Admin.categories.get(i).product.get(j).product_id);
                         System.out.println(Admin.categories.get(i).product.get(j).price);
@@ -545,7 +624,11 @@ interface naam {
                 for (int i = 0; i < adm.offers.size(); i++) {
 
                     System.out.println(adm.offers.get(i).product_id);
-                    System.out.println(adm.offers.get(i).discount_percentage);
+
+                    System.out.println(adm.offers.get(i).discount_percentage_elite);
+                    System.out.println(adm.offers.get(i).discount_percentage_normal);
+                    System.out.println(adm.offers.get(i).discount_percentage_prime);
+
                     System.out.println(adm.offers.get(i).customer);
 
                 }
@@ -595,7 +678,6 @@ interface naam {
                             }
                         }
 
-                        
                         while (true) {
                             System.out.println("Welcome  " + C_name);
                             System.out.println("1.) browse products");
@@ -640,10 +722,9 @@ interface naam {
                                 n.empty_cart();
                             } else if (cust_input == 9) {
                                 // checkout cart
-                                if(flag == 1){
+                                if (flag == 1) {
                                     n.checkout_cart();
-                                }
-                                else{
+                                } else {
                                     System.out.println("Invalid user/ not registered");
                                 }
                             } else if (cust_input == 10) {
@@ -658,7 +739,7 @@ interface naam {
                             }
 
                         }
-                    
+
                     } else {
                         break;
                     }
