@@ -5,16 +5,73 @@ import java.util.*;
 import java.io.*;
 
 class Product {
-    String name;
-    String product_id;
-    double price;
-    String details;
-    double disc_for_normal;
-    double disc_for_elite;
-    double disc_for_prime;
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getProduct_id() {
+        return product_id;
+    }
+
+    public void setProduct_id(String product_id) {
+        this.product_id = product_id;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+
+    public void setDetails(String details) {
+        this.details = details;
+    }
+
+    public double getDisc_for_normal() {
+        return disc_for_normal;
+    }
+
+    public void setDisc_for_normal(double disc_for_normal) {
+        this.disc_for_normal = disc_for_normal;
+    }
+
+    public double getDisc_for_elite() {
+        return disc_for_elite;
+    }
+
+    public void setDisc_for_elite(double disc_for_elite) {
+        this.disc_for_elite = disc_for_elite;
+    }
+
+    public double getDisc_for_prime() {
+        return disc_for_prime;
+    }
+
+    public void setDisc_for_prime(double disc_for_prime) {
+        this.disc_for_prime = disc_for_prime;
+    }
+
+    private String product_id;
+    private double price;
+    private String details;
+    private double disc_for_normal;
+    private double disc_for_elite;
+    private double disc_for_prime;
 
     public void create_product(String name, String product_id, double price, String details, double disc_for_normal,
-            double disc_for_elite, double disc_for_prime) {
+                               double disc_for_elite, double disc_for_prime) {
         this.name = name;
         this.product_id = product_id;
         this.price = price;
@@ -27,9 +84,34 @@ class Product {
 
 class Category {
     // category object
-    int category_id;
-    String category_name;
-    ArrayList<Product> product = new ArrayList<Product>();
+    private int category_id;
+    private String category_name;
+
+    public int getCategory_id() {
+        return category_id;
+    }
+
+    public void setCategory_id(int category_id) {
+        this.category_id = category_id;
+    }
+
+    public String getCategory_name() {
+        return category_name;
+    }
+
+    public void setCategory_name(String category_name) {
+        this.category_name = category_name;
+    }
+
+    public ArrayList<Product> getProduct() {
+        return product;
+    }
+
+    public void setProduct(ArrayList<Product> product) {
+        this.product = product;
+    }
+
+    private ArrayList<Product> product = new ArrayList<Product>();
 
     public void create_category(int category_id, String category_name) {
         this.category_id = category_id;
@@ -45,7 +127,7 @@ class Discount {
     String customer;
 
     public void create_discount(String product_id, Double discount_percentage_normal, Double discount_percentage_elite,
-            Double discount_percentage_prime) {
+                                Double discount_percentage_prime) {
         this.product_id = product_id;
         this.discount_percentage_elite = discount_percentage_elite;
         this.discount_percentage_normal = discount_percentage_normal;
@@ -54,10 +136,43 @@ class Discount {
 }
 
 class Giveaway {
-    String id1;
-    String id2;
-    String giveaway_id;
-    int new_price;
+    private String id1;
+    private String id2;
+    private String giveaway_id;
+
+    public String getId1() {
+        return id1;
+    }
+
+    public void setId1(String id1) {
+        this.id1 = id1;
+    }
+
+    public String getId2() {
+        return id2;
+    }
+
+    public void setId2(String id2) {
+        this.id2 = id2;
+    }
+
+    public String getGiveaway_id() {
+        return giveaway_id;
+    }
+
+    public void setGiveaway_id(String giveaway_id) {
+        this.giveaway_id = giveaway_id;
+    }
+
+    public int getNew_price() {
+        return new_price;
+    }
+
+    public void setNew_price(int new_price) {
+        this.new_price = new_price;
+    }
+
+    private int new_price;
 
     public void create_giveaway(String id1, String id2, int new_price, String giveaway_id) {
         this.id1 = id1;
@@ -68,7 +183,7 @@ class Giveaway {
 }
 
 class Admin {
-    String name;
+    private String name;
     static ArrayList<Integer> categoryID = new ArrayList<Integer>();
     static ArrayList<Category> categories = new ArrayList<Category>();
     static ArrayList<Discount> offers = new ArrayList<Discount>();
@@ -177,7 +292,7 @@ class Admin {
         // iterate over the arraylist categories and delte the category with id == c_id
         // and name == c_name
         for (int i = 0; i < categories.size(); i++) {
-            if (categories.get(i).category_name.equals(c_naam) && categories.get(i).category_id == c_id) {
+            if (categories.get(i).getCategory_name().equals(c_naam) && categories.get(i).getCategory_id() == c_id) {
                 categories.remove(i);
                 System.out.println("Category Removed");
                 break;
@@ -191,7 +306,7 @@ class Admin {
         int id_in_which_product_is_to_be_added = cidtbd.nextInt();
 
         for (int i = 0; i < categoryID.size(); i++) {
-            if (categories.get(i).category_id == id_in_which_product_is_to_be_added) {
+            if (categories.get(i).getCategory_id() == id_in_which_product_is_to_be_added) {
 
                 System.out.println("Add a product");
                 Product p = new Product();
@@ -213,7 +328,7 @@ class Admin {
                 String details = p_d.nextLine();
 
                 p.create_product(p_naam, p_id, pp, details, 0, 0, 0);
-                categories.get(i).product.add(p);
+                categories.get(i).getProduct().add(p);
             }
         }
     }
@@ -229,18 +344,18 @@ class Admin {
         String product_is_to_be_deleted = cidtb.nextLine();
 
         for (int i = 0; i < categories.size(); i++) {
-            if (categories.get(i).category_name.equals(name_in_which_product_is_to_be_deleted)) {
-                if (categories.get(i).product.size() == 0) {
+            if (categories.get(i).getCategory_name().equals(name_in_which_product_is_to_be_deleted)) {
+                if (categories.get(i).getProduct().size() == 0) {
                     System.out.println("Category can't be empty first add some product and then delete this one");
                 } else {
                     Product p = new Product();
-                    for (int j = 0; i < categories.get(i).product.size(); j++) {
-                        if (categories.get(i).product.get(j).product_id.equals(product_is_to_be_deleted)) {
-                            p = categories.get(i).product.get(j);
+                    for (int j = 0; i < categories.get(i).getProduct().size(); j++) {
+                        if (categories.get(i).getProduct().get(j).getProduct_id().equals(product_is_to_be_deleted)) {
+                            p = categories.get(i).getProduct().get(j);
                             break;
                         }
                     }
-                    categories.get(i).product.remove(p);
+                    categories.get(i).getProduct().remove(p);
                 }
             }
         }
@@ -269,11 +384,11 @@ class Admin {
 
         d.create_discount(pid, dn, de, dp);
         for (int i = 0; i < Admin.categories.size(); i++) {
-            for (int j = 0; j < Admin.categories.get(i).product.size(); j++) {
-                if (Admin.categories.get(i).product.get(j).product_id.equals(pid)) {
-                    Admin.categories.get(i).product.get(j).disc_for_normal = dn;
-                    Admin.categories.get(i).product.get(j).disc_for_prime = dp;
-                    Admin.categories.get(i).product.get(j).disc_for_elite = de;
+            for (int j = 0; j < Admin.categories.get(i).getProduct().size(); j++) {
+                if (Admin.categories.get(i).getProduct().get(j).getProduct_id().equals(pid)) {
+                    Admin.categories.get(i).getProduct().get(j).setDisc_for_normal(dn);
+                    Admin.categories.get(i).getProduct().get(j).setDisc_for_prime(dp); 
+                    Admin.categories.get(i).getProduct().get(j).setDisc_for_elite(de); 
                 }
             }
         }
@@ -325,12 +440,12 @@ class Customer {
         // browse products
         for (int i = 0; i < Admin.categories.size(); i++) {
             // iterating over giveaway deals
-            System.out.println(Admin.categories.get(i).category_name);
-            for (int j = 0; j < Admin.categories.get(i).product.size(); j++) {
-                System.out.println(Admin.categories.get(i).product.get(j).name);
-                System.out.println(Admin.categories.get(i).product.get(j).product_id);
-                System.out.println(Admin.categories.get(i).product.get(j).price);
-                System.out.println(Admin.categories.get(i).product.get(j).details);
+            System.out.println(Admin.categories.get(i).getCategory_name());
+            for (int j = 0; j < Admin.categories.get(i).getProduct().size(); j++) {
+                System.out.println(Admin.categories.get(i).getProduct().get(j).getName());
+                System.out.println(Admin.categories.get(i).getProduct().get(j).getProduct_id());
+                System.out.println(Admin.categories.get(i).getProduct().get(j).getPrice());
+                System.out.println(Admin.categories.get(i).getProduct().get(j).getDetails());
             }
         }
     }
@@ -339,10 +454,10 @@ class Customer {
         // browse deals
         for (int i = 0; i < Admin.giveaway.size(); i++) {
             // iterating over giveaway deals
-            System.out.println(Admin.giveaway.get(i).giveaway_id);
-            System.out.println(Admin.giveaway.get(i).id1);
-            System.out.println(Admin.giveaway.get(i).id2);
-            System.out.println(Admin.giveaway.get(i).new_price);
+            System.out.println(Admin.giveaway.get(i).getGiveaway_id());
+            System.out.println(Admin.giveaway.get(i).getId1());
+            System.out.println(Admin.giveaway.get(i).getId2());
+            System.out.println(Admin.giveaway.get(i).getNew_price());
             System.out.println("***********************");
         }
     }
@@ -362,13 +477,13 @@ class Customer {
         int prodqu = pqi.nextInt();
 
         for (int i = 0; i < Admin.categories.size(); i++) {
-            if (Admin.categories.get(i).category_id == cat_id) {
-                for (int j = 0; j < Admin.categories.get(i).product.size(); i++) {
-                    if (Admin.categories.get(i).product.get(j).product_id.equals(prodId)) {
-                        this.cart.add(Admin.categories.get(i).product.get(j));
+            if (Admin.categories.get(i).getCategory_id() == cat_id) {
+                for (int j = 0; j < Admin.categories.get(i).getProduct().size(); i++) {
+                    if (Admin.categories.get(i).getProduct().get(j).getProduct_id().equals(prodId)) {
+                        this.cart.add(Admin.categories.get(i).getProduct().get(j));
 
                         for (int k = 0; k < prodqu; k++) {
-                            this.quantcart.add(Admin.categories.get(i).product.get(j));
+                            this.quantcart.add(Admin.categories.get(i).getProduct().get(j));
                         }
                         return;
                     }
@@ -383,10 +498,10 @@ class Customer {
         // add products in deal to cart
         for (int i = 0; i < Admin.giveaway.size(); i++) {
             // iterating over giveaway deals
-            System.out.println(Admin.giveaway.get(i).giveaway_id);
-            System.out.println(Admin.giveaway.get(i).id1);
-            System.out.println(Admin.giveaway.get(i).id2);
-            System.out.println(Admin.giveaway.get(i).new_price);
+            System.out.println(Admin.giveaway.get(i).getGiveaway_id());
+            System.out.println(Admin.giveaway.get(i).getId1());
+            System.out.println(Admin.giveaway.get(i).getId2());
+            System.out.println(Admin.giveaway.get(i).getNew_price());
             System.out.println("***********************");
         }
         System.out.println("Enter id of deal you want to add to your cart");
@@ -403,9 +518,9 @@ class Customer {
         String details = "";
         int price = 0;
         for (int i = 0; i < Admin.giveaway.size(); i++) {
-            if (Admin.giveaway.get(i).giveaway_id.equals(dealID)) {
-                price = Admin.giveaway.get(i).new_price;
-                details = Admin.giveaway.get(i).id1 + " " + Admin.giveaway.get(i).id2;
+            if (Admin.giveaway.get(i).getGiveaway_id().equals(dealID)) {
+                price = Admin.giveaway.get(i).getNew_price();
+                details = Admin.giveaway.get(i).getId1() + " " + Admin.giveaway.get(i).getId2();
             }
 
         }
@@ -439,9 +554,9 @@ class Customer {
     public void view_cart() {
         // view cart
         for (int i = 0; i < this.cart.size(); i++) {
-            System.out.println(this.cart.get(i).name);
-            System.out.println(this.cart.get(i).product_id);
-            System.out.println(this.cart.get(i).price);
+            System.out.println(this.cart.get(i).getName());
+            System.out.println(this.cart.get(i).getProduct_id());
+            System.out.println(this.cart.get(i).getPrice());
             System.out.println("***********************");
         }
     }
@@ -462,15 +577,15 @@ class Customer {
 
             if (this.currentStatus.equals("NORMAL")) {
                 cart_value = cart_value
-                        + (this.quantcart.get(i).price) * ((1 - ((this.quantcart.get(i).disc_for_normal)) / 100));
+                        + (this.quantcart.get(i).getPrice()) * ((1 - ((this.quantcart.get(i).getDisc_for_normal())) / 100));
             }
             if (this.currentStatus.equals("ELITE")) {
                 cart_value = cart_value
-                        + (this.quantcart.get(i).price) * ((1 - ((this.quantcart.get(i).disc_for_elite)) / 100));
+                        + (this.quantcart.get(i).getPrice()) * ((1 - ((this.quantcart.get(i).getDisc_for_elite())) / 100));
             }
             if (this.currentStatus.equals("PRIME")) {
                 cart_value = cart_value
-                        + (this.quantcart.get(i).price) * ((1 - ((this.quantcart.get(i).disc_for_prime)) / 100));
+                        + (this.quantcart.get(i).getPrice()) * ((1 - ((this.quantcart.get(i).getDisc_for_prime())) / 100));
             }
         }
         if (this.coupon.size() != 0) {
@@ -610,12 +725,12 @@ interface naam {
                 // Explore the product Catalog
                 for (int i = 0; i < Admin.categories.size(); i++) {
                     // iterating over giveaway deals
-                    System.out.println(Admin.categories.get(i).category_name);
-                    for (int j = 0; j < Admin.categories.get(i).product.size(); j++) {
-                        System.out.println(Admin.categories.get(i).product.get(j).name);
-                        System.out.println(Admin.categories.get(i).product.get(j).product_id);
-                        System.out.println(Admin.categories.get(i).product.get(j).price);
-                        System.out.println(Admin.categories.get(i).product.get(j).details);
+                    System.out.println(Admin.categories.get(i).getCategory_name());
+                    for (int j = 0; j < Admin.categories.get(i).getProduct().size(); j++) {
+                        System.out.println(Admin.categories.get(i).getProduct().get(j).getName());
+                        System.out.println(Admin.categories.get(i).getProduct().get(j).getProduct_id());
+                        System.out.println(Admin.categories.get(i).getProduct().get(j).getPrice());
+                        System.out.println(Admin.categories.get(i).getProduct().get(j).getDetails());
                     }
                 }
             } else if (inp == 3) {
