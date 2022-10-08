@@ -709,7 +709,7 @@ interface naam {
                                 n.add_products_in_deal_to_cart();
                             } else if (cust_input == 5) {
                                 // view coupons//
-                                n.view_cart();
+                                n.view_coupons();
                             } else if (cust_input == 6) {
                                 // check account balance //
                                 n.check_account_balance();
