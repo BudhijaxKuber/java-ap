@@ -63,15 +63,33 @@ class Product {
         this.disc_for_prime = disc_for_prime;
     }
 
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public int getQuantity_added() {
+        return quantity_added;
+    }
+
+    public void setQuantity_added(int quantity_added) {
+        this.quantity_added = quantity_added;
+    }
+
+    private int quantity_added;
     private String product_id;
     private double price;
     private String details;
     private double disc_for_normal;
     private double disc_for_elite;
     private double disc_for_prime;
+    private int quantity;
 
     public void create_product(String name, String product_id, double price, String details, double disc_for_normal,
-                               double disc_for_elite, double disc_for_prime) {
+            double disc_for_elite, double disc_for_prime, int quantity) {
         this.name = name;
         this.product_id = product_id;
         this.price = price;
@@ -79,6 +97,8 @@ class Product {
         this.disc_for_elite = disc_for_elite;
         this.disc_for_normal = disc_for_normal;
         this.disc_for_prime = disc_for_prime;
+        this.quantity = quantity;
+        this.quantity_added = 0;
     }
 }
 
@@ -127,7 +147,7 @@ class Discount {
     String customer;
 
     public void create_discount(String product_id, Double discount_percentage_normal, Double discount_percentage_elite,
-                                Double discount_percentage_prime) {
+            Double discount_percentage_prime) {
         this.product_id = product_id;
         this.discount_percentage_elite = discount_percentage_elite;
         this.discount_percentage_normal = discount_percentage_normal;
@@ -269,10 +289,14 @@ class Admin {
             Scanner p_d = new Scanner(System.in);
             String details = p_d.nextLine();
 
-            x.create_product(p_naam, p_id, pp, details, 0, 0, 0);
+            System.out.println("Product Quantity :");
+            Scanner p_q = new Scanner(System.in);
+            int quantit = p_q.nextInt();
+
+            x.create_product(p_naam, p_id, pp, details, 0, 0, 0, quantit);
 
             cat.create_category(category_ID, category_name);
-
+            cat.getProduct().add(x);
             categories.add(cat);
             categoryID.add(category_ID);
 
@@ -327,7 +351,11 @@ class Admin {
                 Scanner p_d = new Scanner(System.in);
                 String details = p_d.nextLine();
 
-                p.create_product(p_naam, p_id, pp, details, 0, 0, 0);
+                System.out.println("Product Quantity :");
+                Scanner p_q = new Scanner(System.in);
+                int quantit = p_q.nextInt();
+
+                p.create_product(p_naam, p_id, pp, details, 0, 0, 0, quantit);
                 categories.get(i).getProduct().add(p);
             }
         }
@@ -387,8 +415,8 @@ class Admin {
             for (int j = 0; j < Admin.categories.get(i).getProduct().size(); j++) {
                 if (Admin.categories.get(i).getProduct().get(j).getProduct_id().equals(pid)) {
                     Admin.categories.get(i).getProduct().get(j).setDisc_for_normal(dn);
-                    Admin.categories.get(i).getProduct().get(j).setDisc_for_prime(dp); 
-                    Admin.categories.get(i).getProduct().get(j).setDisc_for_elite(de); 
+                    Admin.categories.get(i).getProduct().get(j).setDisc_for_prime(dp);
+                    Admin.categories.get(i).getProduct().get(j).setDisc_for_elite(de);
                 }
             }
         }
@@ -480,6 +508,7 @@ class Customer {
             if (Admin.categories.get(i).getCategory_id() == cat_id) {
                 for (int j = 0; j < Admin.categories.get(i).getProduct().size(); i++) {
                     if (Admin.categories.get(i).getProduct().get(j).getProduct_id().equals(prodId)) {
+                        Admin.categories.get(i).getProduct().get(j).setQuantity_added(prodqu);
                         this.cart.add(Admin.categories.get(i).getProduct().get(j));
 
                         for (int k = 0; k < prodqu; k++) {
@@ -512,6 +541,10 @@ class Customer {
         Scanner sicii = new Scanner(System.in);
         int dealq = sicii.nextInt();
 
+        System.out.println("Deal Quantity :");
+        Scanner p_q = new Scanner(System.in);
+        int quantit = p_q.nextInt();
+
         Product m = new Product();
 
         name = "Deal";
@@ -525,7 +558,7 @@ class Customer {
 
         }
 
-        m.create_product(name, dealID, price, details, 0, 0, 0);
+        m.create_product(name, dealID, price, details, 0, 0, 0, quantit);
 
         this.cart.add(m);
         for (int j = 0; j < dealq; j++) {
@@ -554,9 +587,10 @@ class Customer {
     public void view_cart() {
         // view cart
         for (int i = 0; i < this.cart.size(); i++) {
-            System.out.println(this.cart.get(i).getName());
-            System.out.println(this.cart.get(i).getProduct_id());
-            System.out.println(this.cart.get(i).getPrice());
+            System.out.println("Name" + this.cart.get(i).getName());
+            System.out.println("Product ID" + this.cart.get(i).getProduct_id());
+            System.out.println("Price" + this.cart.get(i).getPrice());
+            System.out.println("Quantity" + this.cart.get(i).getQuantity());
             System.out.println("***********************");
         }
     }
@@ -573,19 +607,33 @@ class Customer {
         double cart_value = 0;
         double delivery_charges = 0;
         double coupon_value = 0;
+
+        for (int k = 0; k < this.cart.size(); k++) {
+            if (this.cart.get(k).getQuantity() > this.cart.get(k).getQuantity_added()) {
+
+                // shi hai lelo
+            } else {
+                System.out.println(this.cart.get(k).getName() + "Out of Stock!");
+                return;
+            }
+        }
+
         for (int i = 0; i < this.quantcart.size(); i++) {
 
             if (this.currentStatus.equals("NORMAL")) {
                 cart_value = cart_value
-                        + (this.quantcart.get(i).getPrice()) * ((1 - ((this.quantcart.get(i).getDisc_for_normal())) / 100));
+                        + (this.quantcart.get(i).getPrice())
+                                * ((1 - ((this.quantcart.get(i).getDisc_for_normal())) / 100));
             }
             if (this.currentStatus.equals("ELITE")) {
                 cart_value = cart_value
-                        + (this.quantcart.get(i).getPrice()) * ((1 - ((this.quantcart.get(i).getDisc_for_elite())) / 100));
+                        + (this.quantcart.get(i).getPrice())
+                                * ((1 - ((this.quantcart.get(i).getDisc_for_elite())) / 100));
             }
             if (this.currentStatus.equals("PRIME")) {
                 cart_value = cart_value
-                        + (this.quantcart.get(i).getPrice()) * ((1 - ((this.quantcart.get(i).getDisc_for_prime())) / 100));
+                        + (this.quantcart.get(i).getPrice())
+                                * ((1 - ((this.quantcart.get(i).getDisc_for_prime())) / 100));
             }
         }
         if (this.coupon.size() != 0) {
